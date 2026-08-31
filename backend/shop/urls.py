@@ -1,0 +1,105 @@
+from django.urls import path
+
+from .views import (
+    AddToCartView,
+    CartView,
+    CategoryListView,
+    CheckoutView,
+    ProductListView,
+    RemoveCartItemView,
+    UpdateCartItemView,
+    OrderDetailView,
+    OrderListView,
+    CancelOrderView,
+    AdminOrderStatusUpdateView,
+    ProductReviewListCreateView,
+    ReviewDetailView,
+    WishlistListCreateView,
+    WishlistDeleteView,
+    ProductDetailView,
+    
+)
+
+urlpatterns = [
+    path(
+        "categories/",
+        CategoryListView.as_view(),
+        name="category-list",
+    ),
+    path(
+        "products/",
+        ProductListView.as_view(),
+        name="product-list",
+    ),
+    path(
+        "cart/",
+        CartView.as_view(),
+        name="cart",
+    ),
+    path(
+        "cart/add/",
+        AddToCartView.as_view(),
+        name="add-to-cart",
+    ),
+    path(
+    "cart/items/<int:pk>/",
+    UpdateCartItemView.as_view(),
+    name="update-cart-item",
+),
+    path(
+    "cart/items/<int:pk>/remove/",
+    RemoveCartItemView.as_view(),
+    name="remove-cart-item",
+),
+    path(
+    "checkout/",
+    CheckoutView.as_view(),
+    name="checkout",
+),
+    path(
+    "orders/",
+    OrderListView.as_view(),
+    name="order-list",
+),
+    path(
+    "orders/<int:pk>/",
+    OrderDetailView.as_view(),
+    name="order-detail",
+),
+    path(
+    "orders/<int:pk>/cancel/",
+    CancelOrderView.as_view(),
+    name="cancel-order",
+),
+    path(
+    "admin/orders/<int:pk>/status/",
+    AdminOrderStatusUpdateView.as_view(),
+    name="admin-order-status-update",
+),
+ path(
+        "products/<int:product_id>/reviews/",
+        ProductReviewListCreateView.as_view(),
+        name="product-reviews",
+    ),
+    path(
+    "reviews/<int:pk>/",
+    ReviewDetailView.as_view(),
+    name="review-detail",
+),
+ path(
+    "wishlist/",
+    WishlistListCreateView.as_view(),
+    name="wishlist-list-create",
+),
+path(
+    "wishlist/<int:pk>/",
+    WishlistDeleteView.as_view(),
+    name="wishlist-delete",
+),
+path(
+    "products/<int:pk>/",
+    ProductDetailView.as_view(),
+    name="product-detail",
+),
+
+]

@@ -1,9 +1,14 @@
 import axios from "axios";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.DEV
+    ? "http://127.0.0.1:8000/api/"
+    : "https://pet-care-hub-sable.vercel.app/api/");
+    
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/",
+  baseURL: API_BASE_URL,
 });
-
 
 /*
   Add the access token to every request
@@ -59,8 +64,8 @@ api.interceptors.response.use(
       }
 
       try {
-        const response = await axios.post(
-          "http://127.0.0.1:8000/api/token/refresh/",
+            const response = await axios.post(
+            `${API_BASE_URL}token/refresh/`,
           {
             refresh: refreshToken,
           }

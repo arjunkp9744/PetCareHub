@@ -6,6 +6,9 @@ from .serializers import RegisterSerializer,LoginSerializer,ProfileSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
 
+from django.contrib.auth import get_user_model
+from rest_framework.permissions import AllowAny
+
 
 
 class RegisterView(APIView):
@@ -67,4 +70,41 @@ class ProfileView(APIView):
 
 class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
+
+
+class CreateAdminView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        User = get_user_model()
+
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if not email or not password:
+            return Response(
+                {"error": "Email and password are required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if User.objects.filter(email=email).exists():
+            return Response(
+                {"error": "User with this email already exists."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user = User.objects.create_superuser(
+            email=email,
+            password=password,
+            full_name="PetCareHub Admin",
+            role=User.Role.ADMIN,
+        )
+
+        return Response(
+            {
+                "message": "Admin created successfully.",
+                "email": user.email,
+            },
+            status=status.HTTP_201_CREATED,
+        )    
 

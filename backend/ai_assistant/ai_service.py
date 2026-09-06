@@ -1,8 +1,10 @@
-import requests
+import os
+from google import genai
 
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL_NAME = "qwen2.5:0.5b"
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 
 
 def ask_ai(question):
@@ -15,6 +17,7 @@ feeding, grooming, exercise, hygiene, behavior, and general health.
 Give simple and practical answers.
 
 Do not diagnose diseases or prescribe medicine.
+Do not prescribe or recommend specific medicines.
 If the situation may be serious or urgent, recommend
 contacting a qualified veterinarian.
 
@@ -22,21 +25,9 @@ User question:
 {question}
 """
 
-    response = requests.post(
-    OLLAMA_URL,
-    json={
-        "model": MODEL_NAME,
-        "prompt": prompt,
-        "stream": False,
-        "options": {
-            "num_predict": 250,
-        },
-    },
-    timeout=300,
-)
+    response = client.models.generate_content(
+        model="gemini-3.6-flash",
+        contents=prompt,
+    )
 
-    response.raise_for_status()
-
-    data = response.json()
-
-    return data["response"]
+    return response.text

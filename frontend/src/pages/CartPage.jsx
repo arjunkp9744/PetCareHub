@@ -13,7 +13,9 @@ import {
 import api from "../services/api";
 import "./CartPage.css";
 
-const MEDIA_URL = "http://127.0.0.1:8000";
+const MEDIA_URL = import.meta.env.VITE_API_BASE_URL
+  ? import.meta.env.VITE_API_BASE_URL.replace("/api/", "")
+  : "http://127.0.0.1:8000";
 
 function CartPage() {
   const navigate = useNavigate();
@@ -268,7 +270,11 @@ function CartPage() {
                     <div className="cart-product-image">
                       {item.product_image ? (
                         <img
-                          src={`${MEDIA_URL}${item.product_image}`}
+                          src={
+                                item.product_image?.startsWith("http")
+                                  ? item.product_image
+                                  : `${MEDIA_URL}${item.product_image}`
+                              }
                           alt={item.product_name}
                         />
                       ) : (
